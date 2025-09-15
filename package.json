@@ -1,0 +1,22 @@
+{
+  "name": "task-master",
+  "version": "1.0.0",
+  "description": "config/\r     connection.js - set up mongodb connection\r models/\r     User.js \r     Project.js - has a reference to the user with Schema.Types.ObjectId\r     Task.js - has a reference to the project with Schema.Types.ObjectId\r routes/\r     index.js - routes to apiRoutes\r     api/\r         index.js - has the routes to different routers\r         userRoutes.js - \r         projectRoutes.js - needs auth middleware on all routes\r         taskRoutes.js - needs auth middleware partially, as some routes are children to projectRoutes\r utils/\r     auth.js - middleware to authenticate user\r server.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0"
+  }
+}
