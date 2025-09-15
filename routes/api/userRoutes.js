@@ -1,49 +1,9 @@
 const userRouter = require('express').Router();
-const User = require('../../models/User');
-const jwt = require('jsonwebtoken');
-
-const secret = process.env.JWT_SECRET;
+const { registerUser, loginUser } = require('../../controllers/userController');
 
 //renamed the router as userrouter to keep track of routers because of having a child router
-userRouter.post('/register', async (req, res) => {
-    const { email } = req.body;
-    try {
-        const existingUser = await User.findOne({ email: email });
-        if (existingUser) {
-            return res.status(400).json({ error: 'Email has already been used.' });
-        } else {
-            const user = await User.create(req.body);
-            return res.status(201).json(user)
-        }
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
+userRouter.post('/register', registerUser);
 
-userRouter.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const user = await User.findOne({ email: email });
-        if (!user) {
-            return res.status(400).json({ error: 'Incorrect email or password.' });
-        }
-
-        const correctPw = await user.isCorrectPassword(password);
-        if (!correctPw) {
-            return res.status(400).json({ error: 'Incorrect email or password.' });
-        }
-
-        const payload = {
-            _id: user._id,
-            username: user.username,
-            email: user.email
-        };
-
-        const token = jwt.sign({ data: payload }, secret, { expiresIn: '2h' });
-        return res.status(200).json({ token });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
+userRouter.post('/login', loginUser);
 
 module.exports = userRouter;
