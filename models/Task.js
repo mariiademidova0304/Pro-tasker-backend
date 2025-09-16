@@ -12,6 +12,7 @@ const taskSchema = new Schema({
         required: [true, 'Status is required'],
         enum: ['To do', 'In progress', 'Done']
     },
+    dueDate: Date,
     project: {
         type: Schema.Types.ObjectId,
         ref: 'Project',

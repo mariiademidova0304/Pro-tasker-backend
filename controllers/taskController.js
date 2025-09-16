@@ -42,6 +42,28 @@ const getTasks = async (req, res) => {
     }
 }
 
+const getTaskById = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ message: 'You must be logged in to see this!' });
+        }
+        let task = await Task.findById(req.params.taskId);
+        if (!task) {
+            return res.status(404).json({ message: 'No task found with this id!' });
+        }
+        const project = await Project.findById(task.project);
+        if (!project) {
+            return res.status(403).json({ message: 'Unauthorized to edit this task' });
+        }
+        if (project.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Unauthorized to edit this task' });
+        }
+        res.status(200).json(task)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 const updateTask = async (req, res) => {
     try {
         if (!req.user) {
@@ -88,4 +110,4 @@ const deleteTask = async (req, res) => {
     }
 }
 
-module.exports = { createTask, getTasks, updateTask, deleteTask };
+module.exports = { createTask, getTasks, getTaskById, updateTask, deleteTask };
